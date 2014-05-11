@@ -548,9 +548,10 @@ class runner implements observable
 		{
 			$paths = array();
 
-			foreach (new \recursiveIteratorIterator($this->testDirectoryIterator->getIterator($directory)) as $path)
+            $this->testDirectoryIterator->setPath($directory);
+			foreach (new \recursiveIteratorIterator($this->testDirectoryIterator->getIterator()) as $path)
 			{
-				$paths[] = $path;
+				if (is_file($path)) $paths[] = $path;
 			}
 		}
 		catch (\UnexpectedValueException $exception)
