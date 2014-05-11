@@ -14,6 +14,7 @@ class factory implements \iteratorAggregate
 	protected $acceptDots = false;
 	protected $extensionFilterFactory = null;
 	protected $acceptedExtensions = array('php');
+    protected $path = null;
 
 	public function __construct(\closure $iteratorFactory = null, \closure $dotFilterFactory = null, \closure $extensionFilterFactory = null)
 	{
@@ -60,9 +61,12 @@ class factory implements \iteratorAggregate
 		return $this->extensionFilterFactory;
 	}
 
-	public function getIterator($path)
+	public function getIterator()
 	{
-		$iterator = call_user_func($this->iteratorFactory, $path);
+        if (is_null($this->path)) {
+            // TODO throw exception
+        }
+		$iterator = call_user_func($this->iteratorFactory, $this->path);
 
 		if ($this->acceptDots === false)
 		{
@@ -136,4 +140,9 @@ class factory implements \iteratorAggregate
 	{
 		return trim($extension, '.');
 	}
+
+    public function setPath($path) {
+        $this->path = $path;
+    }
+
 }
